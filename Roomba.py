@@ -12,13 +12,14 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 def load_levels():
-    with open("niveles.json", "r") as file:
+    base_path = os.path.dirname(__file__)  # Obtiene la ruta del script actual
+    file_path = os.path.join(base_path, "servidor", "niveles.json")  # Ajusta la ruta
+    with open(file_path, "r") as file:
         data = json.load(file)
     return [
         Level(tuple(level["inicio"]), tuple(level["fin"]), level["obstaculos"], "Tile1.jpg")
         for level in data
     ]
-
 class Level:
      # Inicializa el nivel con la posición inicial y final del jugador, obstáculos y la imagen de la celda pintada
     def __init__(self, player_start, player_end, obstacles, painted_cell_image):
