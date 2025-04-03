@@ -1,5 +1,10 @@
 from django.http import JsonResponse
 from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+from django.contrib.auth import authenticate, login
 
 def home(request):
     html_content = """
@@ -89,6 +94,7 @@ def serialize_level(level):
 
 # Vista que devuelve los niveles en formato JSON.
 def cargar_niveles(request):
+    user = request.user
     levels = [
         Level(
             (0, 0), (5, 10), 
@@ -133,3 +139,44 @@ def cargar_niveles(request):
     # Serializamos cada nivel y lo devolvemos como JSON.
     data = [serialize_level(level) for level in levels]
     return JsonResponse(data, safe=False)
+
+# Creo una vista para registrar usuarios
+@csrf_exempt
+def registrar_usuario(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            username = data.get("username")
+            password = data.get("password")
+            email = data.get("email", "")
+
+            if not username or not password:
+                return JsonResponse({"error": "El nombre de usuario y la contraseña son obligatorios."}, status=400)
+
+            if User.objects.filter(username=username).exists():
+                return JsonResponse({"error": "El nombre de usuario ya está en uso."}, status=400)
+
+            user = User.objects.create_user(username=username, password=password, email=email)
+            return JsonResponse({"message": "Usuario registrado exitosamente.", "user_id": user.id})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Método no permitido."}, status=405)
+
+# Creo otra vista para que puedan iniciar sesión
+@csrf_exempt
+def iniciar_sesion(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            username = data.get("username")
+            password = data.get("password")
+
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return JsonResponse({"message": "Inicio de sesión exitoso.", "user_id": user.id})
+            else:
+                return JsonResponse({"error": "Credenciales inválidas."}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Método no permitido."}, status=405)

@@ -22,9 +22,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 from servidor.game.views import cargar_niveles, home
+from servidor.game.views import registrar_usuario, iniciar_sesion, cargar_niveles
 
 urlpatterns = [
     path("", home, name="home"),  # Página de inicio
+    path("api/levels/", cargar_niveles, name="cargar_niveles"),
+    path("api/register/", registrar_usuario, name="registrar_usuario"),
+    path("api/login/", iniciar_sesion, name="iniciar_sesion"),
     path("api/levels/", cargar_niveles, name="cargar_niveles"),
 ]
 
