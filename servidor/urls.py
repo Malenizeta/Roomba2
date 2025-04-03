@@ -20,10 +20,13 @@ from django.urls import path
 from servidor.game.views import cargar_niveles
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path
+from servidor.game.views import cargar_niveles, home
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("", home, name="home"),  # Página de inicio
     path("api/levels/", cargar_niveles, name="cargar_niveles"),
 ]
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

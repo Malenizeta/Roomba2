@@ -1,4 +1,8 @@
 from django.http import JsonResponse
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("<h1>Bienvenido a la API del juego</h1><p>Visita <a href='/api/levels/'>/api/levels/</a> para ver los niveles.</p>")
 
 # Definición simple de la clase Level para representar los niveles.
 class Level:
