@@ -2,6 +2,7 @@ import pygame
 import concurrent.futures
 import os
 import json
+import requests
 
 # Configuración de la pantalla
 WIDTH, HEIGHT = 1440, 720
@@ -12,14 +13,20 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 def load_levels():
-    base_path = os.path.dirname(__file__)  # Obtiene la ruta del script actual
-    file_path = os.path.join(base_path, "servidor", "niveles.json")  # Ajusta la ruta
-    with open(file_path, "r") as file:
-        data = json.load(file)
-    return [
-        Level(tuple(level["inicio"]), tuple(level["fin"]), level["obstaculos"], "Tile1.jpg")
-        for level in data
-    ]
+    try:
+        # Solicita los niveles desde el servidor
+        response = requests.get("http://127.0.0.1:8000/api/levels/")
+        response.raise_for_status()  # Lanza una excepción si la solicitud falla
+        data = response.json()  # Obtiene los datos JSON de la respuesta
+       
+        print(f"Se han cargado {len(data)} niveles desde el servidor.")
+        return [
+            Level(tuple(level["inicio"]), tuple(level["fin"]), level["obstaculos"], level["tile_image"])
+            for level in data
+        ]
+    except requests.RequestException as e:
+        print(f"Error al cargar los niveles desde el servidor: {e}")
+        return []  # Devuelve una lista vacía si ocurre un error
 class Level:
      # Inicializa el nivel con la posición inicial y final del jugador, obstáculos y la imagen de la celda pintada
     def __init__(self, player_start, player_end, obstacles, painted_cell_image):
@@ -37,14 +44,6 @@ class Level:
             print(f"Error al cargar la imagen de la celda pintada: {e}")
             self.painted_cell_image = None
     
-    #Es un cálculo simple y rápido, por lo que no es necesario usar hilos
-    #def calcular_pintura(self):
-    #   with concurrent.futures.ThreadPoolExecutor() as executor:
-    #       total_celdas = ROWS * COLS
-    #       obstaculos_celdas = sum(executor.map(len, [obstacle["cells"] for obstacle in self.obstacles]))
-    #        return total_celdas - obstaculos_celdas - len(self.painted_cells)
-    
-    # Calcula la cantidad de celdas que quedan por pintar
     def calcular_pintura(self):
         total_celdas = ROWS * COLS
         obstaculos_celdas = sum(len(obstacle["cells"]) for obstacle in self.obstacles)
