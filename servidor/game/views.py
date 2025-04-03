@@ -2,7 +2,66 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 
 def home(request):
-    return HttpResponse("<h1>Bienvenido a la API del juego</h1><p>Visita <a href='/api/levels/'>/api/levels/</a> para ver los niveles.</p>")
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Servidor del Juego</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                background-color: #f4f4f9;
+                color: #333;
+                margin: 0;
+                padding: 0;
+            }
+            header {
+                background-color: #87abed;
+                color: white;
+                padding: 20px 0;
+            }
+            h1 {
+                margin: 0;
+            }
+            main {
+                padding: 20px;
+            }
+            a {
+                color: #87abed;
+                text-decoration: none;
+                font-weight: bold;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            footer {
+                margin-top: 20px;
+                font-size: 0.9em;
+                color: #666;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Bienvenido al Servidor del Juego</h1>
+        </header>
+        <main>
+            <p>Este servidor gestiona los niveles y otras funcionalidades del juego.</p>
+            <p>Enlaces útiles:</p>
+            <ul>
+                <li><a href="/api/levels/">Ver niveles disponibles</a></li>
+            </ul>
+        </main>
+        <footer>
+            <p>Malen Izeta</p>
+        </footer>
+    </body>
+    </html>
+    """
+    return HttpResponse(html_content)
 
 # Definición simple de la clase Level para representar los niveles.
 class Level:
