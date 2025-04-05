@@ -187,13 +187,11 @@ def registrar_usuario():
     print("Registrar usuario:")
     username = input("Ingrese un nombre de usuario: ")
     password = input("Ingrese una contraseña: ")
-    email = input("Ingrese su correo electrónico (opcional): ")
 
     try:
         response = requests.post(f"{SERVER_URL}/registrar_usuario/", json={
             "username": username,
             "password": password,
-            "email": email
         })
 
         if response.status_code == 200:
@@ -232,7 +230,6 @@ def menu_autenticacion():
         print("Bienvenido a Roomba y el Desafío del Papel Pintado")
         print("1. Iniciar sesión")
         print("2. Registrarse")
-        print("3. Salir")
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":

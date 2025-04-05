@@ -10,7 +10,7 @@ def home(request):
     # Obtenemos todos los usuarios registrados
     usuarios = User.objects.all()
     usuarios_html = "".join(
-        f"<li>ID: {usuario.id}, Username: {usuario.username}, Email: {usuario.email}, Fecha de registro: {usuario.date_joined.strftime('%Y-%m-%d %H:%M:%S')}</li>"
+        f"<li>ID: {usuario.id}, Username: {usuario.username}, Fecha de registro: {usuario.date_joined.strftime('%Y-%m-%d %H:%M:%S')}</li>"
         for usuario in usuarios
     )
 
@@ -65,15 +65,15 @@ def home(request):
             <h1>Bienvenido al Servidor del Juego</h1>
         </header>
         <main>
-            <p>Este servidor gestiona los niveles y otras funcionalidades del juego.</p>
-            <p>Enlaces útiles:</p>
+            <p>Bienvenido al servidor del juego. Aquí puedes explorar los niveles disponibles y ver la lista de usuarios registrados.</p>
+            <p>Selecciona una de las siguientes opciones:</p>
             <ul>
                 <li><a href="/api/levels/">Ver niveles disponibles</a></li>
                 <li><a href="/usuarios_registrados/">Usuarios Registrados</a></li>
             </ul>
         </main>
         <footer>
-            <p>Malen Izeta</p>
+            <p>Servidor gestionado por Malen Izeta</p>
         </footer>
     </body>
     </html>
@@ -160,7 +160,6 @@ def registrar_usuario(request):
             data = json.loads(request.body)
             username = data.get("username")
             password = data.get("password")
-            email = data.get("email", "")
 
             if not username or not password:
                 return JsonResponse({"error": "El nombre de usuario y la contraseña son obligatorios."}, status=400)
@@ -168,7 +167,7 @@ def registrar_usuario(request):
             if User.objects.filter(username=username).exists():
                 return JsonResponse({"error": "El nombre de usuario ya está en uso."}, status=400)
 
-            user = User.objects.create_user(username=username, password=password, email=email)
+            user = User.objects.create_user(username=username, password=password)
             return JsonResponse({
                "message": "Usuario registrado exitosamente. Redirigiendo a inicio de sesión.",
                 "redirect_to": "/iniciar_sesion/"})
@@ -208,7 +207,6 @@ def listar_usuarios(request):
                 {
                     "id": usuario.id,
                     "username": usuario.username,
-                    "email": usuario.email,
                     "date_joined": usuario.date_joined.strftime("%Y-%m-%d %H:%M:%S"),
                 }
                 for usuario in usuarios
@@ -222,7 +220,7 @@ def usuarios_registrados(request):
     # Obtenemos todos los usuarios registrados
     usuarios = User.objects.all()
     usuarios_html = "".join(
-        f"<li>ID: {usuario.id}, Username: {usuario.username}, Email: {usuario.email}, Fecha de registro: {usuario.date_joined.strftime('%Y-%m-%d %H:%M:%S')}</li>"
+        f"<li>ID: {usuario.id}, Username: {usuario.username}, Fecha de registro: {usuario.date_joined.strftime('%Y-%m-%d %H:%M:%S')}</li>"
         for usuario in usuarios
     )
 
