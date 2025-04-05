@@ -197,7 +197,9 @@ def registrar_usuario():
         })
 
         if response.status_code == 200:
-            print("Usuario registrado exitosamente.")
+            data = response.json()
+            print(data["message"])
+            return iniciar_sesion()
         else:
             print(f"Error: {response.json().get('error', 'Error desconocido')}")
     except requests.RequestException as e:
@@ -239,10 +241,10 @@ def menu_autenticacion():
                 print(f"Inicio de sesión exitoso. Bienvenido, usuario {usuario}!")
                 return usuario
         elif opcion == "2":
-            registrar_usuario()
-        elif opcion == "3":
-            print("Saliendo del juego...")
-            exit()
+            usuario = registrar_usuario()
+            if usuario:
+                print(f"Registro exitoso. Bienvenido, usuario {usuario}!")
+                return usuario
         else:
             print("Opción no válida. Intente de nuevo.")
 

@@ -157,7 +157,9 @@ def registrar_usuario(request):
                 return JsonResponse({"error": "El nombre de usuario ya está en uso."}, status=400)
 
             user = User.objects.create_user(username=username, password=password, email=email)
-            return JsonResponse({"message": "Usuario registrado exitosamente.", "user_id": user.id})
+            return JsonResponse({
+               "message": "Usuario registrado exitosamente. Redirigiendo a inicio de sesión.",
+                "redirect_to": "/iniciar_sesion/"})
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
     return JsonResponse({"error": "Método no permitido."}, status=405)
