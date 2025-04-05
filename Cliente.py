@@ -94,7 +94,12 @@ class Game:
         self.obstacle_images = self.level.cargar_imagenes_obstaculos()
         self.player_pos = list(self.level.player_start)  
         self.level.painted_cells = {self.level.player_start: 3} 
-        self.level.pintura_restante = self.level.calcular_pintura()   
+        self.level.pintura_restante = self.level.calcular_pintura() 
+        self.obstacle_cells = {
+            tuple(cell)
+            for obstacle in self.level.obstacles
+            for cell in obstacle["cells"]
+        }  
     
     # Dibuja la cuadrícula del nivel
     def draw_grid(self):
@@ -149,7 +154,7 @@ class Game:
         elif event.key == pygame.K_RIGHT:
             new_pos[1] += 1
         
-        if (0 <= new_pos[0] < ROWS and 0 <= new_pos[1] < COLS and tuple(new_pos) not in [cell for obs in self.level.obstacles for cell in obs["cells"]]):
+        if (0 <= new_pos[0] < ROWS and 0 <= new_pos[1] < COLS and tuple(new_pos) not in self.obstacle_cells):
             if tuple(new_pos) in self.level.painted_cells:
                 self.reset_level()
             else:
