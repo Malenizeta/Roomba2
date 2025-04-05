@@ -64,6 +64,9 @@ python -m cliente.main
 - **Interfaz Web**:
   - Ver los niveles disponibles con imágenes.
   - Listar los usuarios registrados.
+    ![Captura de pantalla 2025-04-05 185221](https://github.com/user-attachments/assets/8680d5d8-0eff-4d04-b56c-63808d0627a9)
+    ![Captura de pantalla 2025-04-05 185228](https://github.com/user-attachments/assets/8ef8da92-d155-4e93-9cc8-b1c2ebabc9f4)
+    ![Captura de pantalla 2025-04-05 185237](https://github.com/user-attachments/assets/1f175af8-ab2d-4d04-ab3c-de4ba99c9da3)
 
 ## Funcionalidades del Cliente
 
