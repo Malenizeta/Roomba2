@@ -7,7 +7,14 @@ import json
 from django.contrib.auth import authenticate, login
 
 def home(request):
-    html_content = """
+    # Obtenemos todos los usuarios registrados
+    usuarios = User.objects.all()
+    usuarios_html = "".join(
+        f"<li>ID: {usuario.id}, Username: {usuario.username}, Email: {usuario.email}, Fecha de registro: {usuario.date_joined.strftime('%Y-%m-%d %H:%M:%S')}</li>"
+        for usuario in usuarios
+    )
+
+    html_content = f"""
     <!DOCTYPE html>
     <html lang="es">
     <head>
@@ -15,38 +22,42 @@ def home(request):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Servidor del Juego</title>
         <style>
-            body {
+            body {{
                 font-family: Arial, sans-serif;
                 text-align: center;
                 background-color: #f4f4f9;
                 color: #333;
                 margin: 0;
                 padding: 0;
-            }
-            header {
+            }}
+            header {{
                 background-color: #87abed;
                 color: white;
                 padding: 20px 0;
-            }
-            h1 {
+            }}
+            h1 {{
                 margin: 0;
-            }
-            main {
+            }}
+            main {{
                 padding: 20px;
-            }
-            a {
+            }}
+            a {{
                 color: #87abed;
                 text-decoration: none;
                 font-weight: bold;
-            }
-            a:hover {
+            }}
+            a:hover {{
                 text-decoration: underline;
-            }
-            footer {
+            }}
+            footer {{
                 margin-top: 20px;
                 font-size: 0.9em;
                 color: #666;
-            }
+            }}
+            ul {{
+                text-align: left;
+                display: inline-block;
+            }}
         </style>
     </head>
     <body>
@@ -58,6 +69,7 @@ def home(request):
             <p>Enlaces útiles:</p>
             <ul>
                 <li><a href="/api/levels/">Ver niveles disponibles</a></li>
+                <li><a href="/usuarios_registrados/">Usuarios Registrados</a></li>
             </ul>
         </main>
         <footer>
@@ -182,3 +194,82 @@ def iniciar_sesion(request):
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
     return JsonResponse({"error": "Método no permitido."}, status=405)
+
+# Vista para que aparezca una lista de los usuarios registrados
+
+@csrf_exempt
+def listar_usuarios(request):
+    if request.method == "GET":
+        try:
+            # Obtenemos todos los usuarios
+            usuarios = User.objects.all()
+            # Serializamos los datos de los usuarios
+            data = [
+                {
+                    "id": usuario.id,
+                    "username": usuario.username,
+                    "email": usuario.email,
+                    "date_joined": usuario.date_joined.strftime("%Y-%m-%d %H:%M:%S"),
+                }
+                for usuario in usuarios
+            ]
+            return JsonResponse({"usuarios": data}, safe=False)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Método no permitido."}, status=405)
+
+def usuarios_registrados(request):
+    # Obtenemos todos los usuarios registrados
+    usuarios = User.objects.all()
+    usuarios_html = "".join(
+        f"<li>ID: {usuario.id}, Username: {usuario.username}, Email: {usuario.email}, Fecha de registro: {usuario.date_joined.strftime('%Y-%m-%d %H:%M:%S')}</li>"
+        for usuario in usuarios
+    )
+
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Usuarios Registrados</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                text-align: center;
+                background-color: #f4f4f9;
+                color: #333;
+                margin: 0;
+                padding: 0;
+            }}
+            header {{
+                background-color: #87abed;
+                color: white;
+                padding: 20px 0;
+            }}
+            h1 {{
+                margin: 0;
+            }}
+            main {{
+                padding: 20px;
+            }}
+            ul {{
+                text-align: left;
+                display: inline-block;
+            }}
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Usuarios Registrados</h1>
+        </header>
+        <main>
+            <ul>
+                {usuarios_html}
+            </ul>
+            <a href="/">Volver a la página principal</a>
+        </main>
+    </body>
+    </html>
+    """
+    return HttpResponse(html_content)
