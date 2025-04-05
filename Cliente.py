@@ -180,7 +180,76 @@ class Game:
                     self.move_player(event)
         pygame.quit()
     
-  
+
+SERVER_URL = "http://127.0.0.1:8000"
+
+def registrar_usuario():
+    print("Registrar usuario:")
+    username = input("Ingrese un nombre de usuario: ")
+    password = input("Ingrese una contraseña: ")
+    email = input("Ingrese su correo electrónico (opcional): ")
+
+    try:
+        response = requests.post(f"{SERVER_URL}/registrar_usuario/", json={
+            "username": username,
+            "password": password,
+            "email": email
+        })
+
+        if response.status_code == 200:
+            print("Usuario registrado exitosamente.")
+        else:
+            print(f"Error: {response.json().get('error', 'Error desconocido')}")
+    except requests.RequestException as e:
+        print(f"Error al conectar con el servidor: {e}")
+
+def iniciar_sesion():
+    print("Iniciar sesión:")
+    username = input("Ingrese su nombre de usuario: ")
+    password = input("Ingrese su contraseña: ")
+
+    try:
+        response = requests.post(f"{SERVER_URL}/iniciar_sesion/", json={
+            "username": username,
+            "password": password
+        })
+
+        if response.status_code == 200:
+            data = response.json()
+            print("Inicio de sesión exitoso.")
+            return data["user_id"]
+        else:
+            print(f"Error: {response.json().get('error', 'Error desconocido')}")
+            return None
+    except requests.RequestException as e:
+        print(f"Error al conectar con el servidor: {e}")
+        return None
+
+def menu_autenticacion():
+    while True:
+        print("Bienvenido a Roomba y el Desafío del Papel Pintado")
+        print("1. Iniciar sesión")
+        print("2. Registrarse")
+        print("3. Salir")
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            usuario = iniciar_sesion()
+            if usuario:
+                print(f"Inicio de sesión exitoso. Bienvenido, usuario {usuario}!")
+                return usuario
+        elif opcion == "2":
+            registrar_usuario()
+        elif opcion == "3":
+            print("Saliendo del juego...")
+            exit()
+        else:
+            print("Opción no válida. Intente de nuevo.")
+
 if __name__ == "__main__":
+    usuario = menu_autenticacion()  # Solicita al usuario que inicie sesión o se registre
     levels = load_levels()  
-    Game(levels).run()
+    if levels:
+        Game(levels).run()
+    else:
+        print("No se pudieron cargar los niveles. Verifique la conexión al servidor.")

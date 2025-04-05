@@ -140,7 +140,7 @@ def cargar_niveles(request):
     data = [serialize_level(level) for level in levels]
     return JsonResponse(data, safe=False)
 
-# Creo una vista para registrar usuarios
+# # Creo una vista para registrar usuarios
 @csrf_exempt
 def registrar_usuario(request):
     if request.method == "POST":
@@ -162,7 +162,7 @@ def registrar_usuario(request):
             return JsonResponse({"error": str(e)}, status=500)
     return JsonResponse({"error": "Método no permitido."}, status=405)
 
-# Creo otra vista para que puedan iniciar sesión
+# # Creo otra vista para que puedan iniciar sesión
 @csrf_exempt
 def iniciar_sesion(request):
     if request.method == "POST":
