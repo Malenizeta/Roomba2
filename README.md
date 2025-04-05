@@ -1,25 +1,106 @@
-# GitHub Codespaces ♥️ Django
+# Roomba y el Desafío del Papel Pintado
 
-Welcome to your shiny new Codespace running Django! We've got everything fired up and running for you to explore Django.
+¡Bienvenido a **Roomba y el Desafío del Papel Pintado**! Este es un juego interactivo en el que controlas una Roomba para pintar un área mientras esquivas obstáculos. El proyecto incluye un servidor que gestiona los niveles del juego y los usuarios registrados.
 
-You've got a blank canvas to work on from a git perspective as well. There's a single initial commit with what you're seeing right now - where you go from here is up to you!
+## Descripción del Proyecto
 
-Everything you do here is contained within this one codespace. There is no repository on GitHub yet. If and when you’re ready you can click "Publish Branch" and we’ll create your repository and push up your project. If you were just exploring then and have no further need for this code then you can simply delete your codespace and it's gone forever.
+Este proyecto está dividido en dos partes principales:
 
-## installing dependancies
+1. **Servidor**:
+   - Gestiona los niveles del juego.
+   - Permite registrar usuarios y manejar la autenticación.
+   - Proporciona una API para cargar niveles y listar usuarios registrados.
+   - Ofrece una interfaz web para explorar los niveles disponibles y los usuarios registrados.
 
-```python
-pip install -r requirements.txt
-```
+2. **Cliente**:
+   - Es el juego en sí, donde puedes controlar la Roomba para completar los niveles.
+   - Carga los niveles desde el servidor mediante la API.
+   - Incluye un sistema de autenticación para iniciar sesión o registrarse antes de jugar.
 
-## To collect static files:
+## Requisitos Previos
 
-```python
-python manage.py collectstatic
-```
+Asegúrate de tener instalado lo siguiente en tu sistema:
+- Python 3.8 o superior
+- Pygame (para el cliente)
+- Las dependencias listadas en `requirements.txt`
 
-## To run this application:
+## Instalación
 
-```python
+1. Clona este repositorio en tu máquina local:
+   ```bash
+   git clone <URL_DEL_REPOSITORIO>
+   cd Roomba2
+   ```
+
+2. Instala las dependencias necesarias:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Configura la base de datos de Django:
+   ```bash
+   python manage.py migrate
+   ```
+
+## Ejecución del Proyecto
+
+### 1. Ejecutar el Servidor
+El servidor es necesario para gestionar los niveles y los usuarios. Para iniciarlo, ejecuta:
+```bash
 python manage.py runserver
 ```
+Esto iniciará el servidor en `http://127.0.0.1:8000/`.
+
+### 2. Ejecutar el Cliente
+El cliente es el juego. Para iniciarlo, ejecuta:
+```bash
+python -m cliente.main
+```
+
+## Funcionalidades del Servidor
+
+- **Gestión de Niveles**: El servidor proporciona una API para cargar los niveles del juego.
+- **Gestión de Usuarios**: Permite registrar nuevos usuarios e iniciar sesión.
+- **Interfaz Web**:
+  - Ver los niveles disponibles con imágenes.
+  - Listar los usuarios registrados.
+
+## Funcionalidades del Cliente
+
+- **Juego Interactivo**: Controla la Roomba para pintar el área mientras esquivas obstáculos.
+- **Autenticación**: Inicia sesión o regístrate antes de jugar.
+- **Carga de Niveles**: Obtiene los niveles dinámicamente desde el servidor.
+
+## Estructura del Proyecto
+
+```
+Roomba2/
+├── cliente/
+│   ├── __init__.py      # Indica que esta carpeta es un paquete Python
+│   ├── auth.py          # Funciones de autenticación (registro e inicio de sesión)
+│   ├── game.py          # Lógica del juego
+│   ├── level.py         # Clase Level y lógica de niveles
+│   ├── main.py          # Punto de entrada del cliente
+│   ├── utils.py         # Funciones auxiliares
+│   ├── const.py         # Constantes globales del cliente (dimensiones, colores, etc.)
+├── servidor/
+│   ├── game/
+│   │   ├── views.py     # Vistas del servidor
+│   │   ├── urls.py      # Rutas del servidor
+│   ├── settings.py      # Configuración de Django
+│   ├── ...
+├── manage.py            # Comando principal de Django
+├── requirements.txt     # Dependencias del proyecto
+├── README.md            # Este archivo
+```
+
+## API del Servidor
+
+El servidor expone las siguientes rutas principales:
+
+- **`POST /registrar_usuario/`**: Registra un nuevo usuario.
+- **`POST /iniciar_sesion/`**: Inicia sesión con un usuario existente.
+- **`GET /api/levels/`**: Devuelve los niveles disponibles.
+- **`GET /usuarios_registrados/`**: Muestra una lista de usuarios registrados.
+
+¡Disfruta jugando a **Roomba y el Desafío del Papel Pintado**!
