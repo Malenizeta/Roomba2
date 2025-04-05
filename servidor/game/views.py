@@ -68,7 +68,7 @@ def home(request):
             <p>Bienvenido al servidor del juego. Aquí puedes explorar los niveles disponibles y ver la lista de usuarios registrados.</p>
             <p>Selecciona una de las siguientes opciones:</p>
             <ul>
-                <li><a href="/api/levels/">Ver niveles disponibles</a></li>
+                <li><a href="/niveles_disponibles/">Ver niveles disponibles</a></li>
                 <li><a href="/usuarios_registrados/">Usuarios Registrados</a></li>
             </ul>
         </main>
@@ -265,6 +265,70 @@ def usuarios_registrados(request):
             <ul>
                 {usuarios_html}
             </ul>
+            <a href="/">Volver a la página principal</a>
+        </main>
+    </body>
+    </html>
+    """
+    return HttpResponse(html_content)
+
+def niveles_disponibles(request):
+    # Lista de imágenes de los niveles
+    imagenes = [
+        "Tile1.jpg",
+        "Tile2.jpg",
+        "Tile3.jpg",
+        "Tile4.jpg",
+    ]
+
+    # Generar HTML para mostrar las imágenes
+    imagenes_html = "".join(
+        f'<img src="/static/{imagen}" alt="Nivel {i+1}" style="width: 200px; height: auto; margin: 10px;">'
+        for i, imagen in enumerate(imagenes)
+    )
+
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Niveles Disponibles</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                text-align: center;
+                background-color: #f4f4f9;
+                color: #333;
+                margin: 0;
+                padding: 0;
+            }}
+            header {{
+                background-color: #87abed;
+                color: white;
+                padding: 20px 0;
+            }}
+            h1 {{
+                margin: 0;
+            }}
+            main {{
+                padding: 20px;
+            }}
+            img {{
+                margin: 10px;
+                border: 2px solid #87abed;
+                border-radius: 10px;
+            }}
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Niveles Disponibles</h1>
+        </header>
+        <main>
+            <div>
+                {imagenes_html}
+            </div>
             <a href="/">Volver a la página principal</a>
         </main>
     </body>

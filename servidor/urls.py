@@ -24,6 +24,7 @@ from servidor.game.views import cargar_niveles, home
 from servidor.game.views import registrar_usuario, iniciar_sesion, cargar_niveles
 from servidor.game.views import listar_usuarios
 from servidor.game.views import usuarios_registrados
+from servidor.game.views import niveles_disponibles
 
 urlpatterns = [
     path("", home, name="home"),  # Página de inicio
@@ -33,6 +34,7 @@ urlpatterns = [
     path("api/levels/", cargar_niveles, name="cargar_niveles"),
     path("api/usuarios/", listar_usuarios, name="listar_usuarios"),
     path("usuarios_registrados/", usuarios_registrados, name="usuarios_registrados"),
+    path("niveles_disponibles/", niveles_disponibles, name="niveles_disponibles"),
 ]
 
 
